@@ -38,7 +38,9 @@ function validateRequest($request)
     validate(isset($request['training_type']), 'Property "training_type" is required', 400);
     validate($request['training_type'] === "indoor" || $request['training_type'] === "outdoor", 'Property "training_type" has invalid type', 400);
 
-
+    validate(isset($request['description']), 'Property "description" is required', 400);
+    validate($request['description'] != '', 'Property "description" must not be empty', 400);
+    validate(strlen($request['description']) < 300, 'Property "description" must not be not longer than 300 characters', 400);
 }
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
@@ -48,11 +50,9 @@ $parsedRequest = json_decode($requestBody, true);
 $connection = mysqli_connect("localhost", "root", "", "fitnesstracker", 3306);
 validate($connection, 'Establishing database connection failed (internal error)', 500);
 
-
-
 if ($requestMethod == 'GET') {
 
-    $query = "SELECT id, name, timestamp, burned_calories, training_type FROM record";
+    $query = "SELECT recordId, name, timestamp, burned_calories, training_type, description FROM record";
 
     $stmt = mysqli_prepare($connection, $query);
 
@@ -84,14 +84,15 @@ if ($requestMethod == 'GET') {
     $timestamp = $parsedRequest['timestamp'];
     $burnedCalories = $parsedRequest['burned_calories'];
     $trainingType = $parsedRequest['training_type'];
+    $description = $parsedRequest['description'];
 
-    $query = "insert into record (name, timestamp, burned_calories, training_type) values (?, ?, ?, ?)";
+    $query = "insert into record (name, timestamp, burned_calories, training_type, description) values (?, ?, ?, ?, ?)";
 
     $stmt = mysqli_prepare($connection, $query);
 
     validate($stmt, 'Failed to prepare SQL statement', 500);
 
-    mysqli_stmt_bind_param($stmt, 'ssis', $name, $timestamp, $burnedCalories, $trainingType);
+    mysqli_stmt_bind_param($stmt, 'ssiss', $name, $timestamp, $burnedCalories, $trainingType, $description);
 
     validate($stmt, 'Failed to bind parameters to SQL statement', 500);
 
