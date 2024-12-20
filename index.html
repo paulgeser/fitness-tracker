@@ -5,16 +5,117 @@
     <title>ActiveTrack</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
+ -->
     <script src="js/script.js"></script>
 </head>
 
 <body>
     <header>
-
+        <div class="w3-bar w3-black">
+            <a href="#" class="w3-bar-item w3-button w3-mobile w3-green">ActiveTrack</a>
+            <a href="#" class="w3-bar-item w3-button w3-mobile">Link 1</a>
+            <a href="#" class="w3-bar-item w3-button w3-mobile">Link 2</a>
     </header>
 
     <main>
 
+        <section id="about">
+            <h2>What is training tracker?</h2>
+            <div>
+                "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est
+                eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas
+                assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum
+                necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum
+                rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut
+                perferendis doloribus asperiores repellat."
+
+                <br>
+                <br>
+
+                "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est
+                eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas
+                assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum
+                necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum
+                rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut
+                perferendis doloribus asperiores repellat."
+
+                <br>
+                <br>
+
+                "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est
+                eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas
+                assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum
+                necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum
+                rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut
+                perferendis doloribus asperiores repellat."
+            </div>
+        </section>
+
+        <section id="add">
+            <h2>Add training record</h2>
+            <div class="w3-container">
+                <div>
+                    <label for="name">Names</label>
+                    <input id="name" name="name" class="w3-input w3-border w3-round-large" type="text" required>
+                </div>
+
+                <div>
+                    <label for="burnedCalories">Burned calories</label>
+                    <input id="burnedCalories" name="burnedCalories" class="w3-input w3-border w3-round-large"
+                        type="number" min="1" max="10000" required>
+                </div>
+
+                <div>
+                    <label for="timestamp">Timestamp</label>
+                    <input id="timestamp" name="timestamp" class="w3-input w3-border w3-round-large"
+                        type="datetime-local" step=1 required>
+                </div>
+
+                <div>
+                    <label for="trainingType">Training type</label>
+                    <select id="trainingType" name="trainingType" class="w3-select w3-border w3-round-large" required>
+                        <option value="" disabled selected>Choose your training type</option>
+                        <option value="outdoor">Outdoor</option>
+                        <option value="indoor">Indoor</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="description">Description</label>
+                    <input id="description" name="description" class="w3-input w3-border w3-round-large" type="text"
+                        required>
+                </div>
+
+                <button onclick="addNewTrainingRecord()">Send to api</button>
+            </div>
+        </section>¨
+
+        <section id="table">
+            <h2>Table</h2>
+
+            <div id="table-content">
+
+            </div>
+        </section>
+
+        <section id="diagram">
+            <h2>Diagram</h2>
+            <div>
+                <canvas id="training-diagramm"></canvas>
+            </div>
+        </section>
     </main>
 </body>
 

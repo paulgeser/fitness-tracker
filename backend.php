@@ -16,7 +16,15 @@ function isValidMySQLDatetime($datetime)
     return $dt && $dt->format($format) === $datetime;
 }
 
-function validateRequest($request)
+function validateGetRequest($params)
+{
+    validate($params != null, 'Valid request params are required', 400);
+
+    validate(isset($params['training_type']), 'Param "training_type" is required', 400);
+    validate($params['training_type'] === "indoor" || $params['training_type'] === "outdoor", 'Param "training_type" has invalid type', 400);
+}
+
+function validatePostRequest($request)
 {
     validate($request != null, 'Valid JSON syntax required', 400);
 
@@ -38,25 +46,54 @@ function validateRequest($request)
     validate(isset($request['training_type']), 'Property "training_type" is required', 400);
     validate($request['training_type'] === "indoor" || $request['training_type'] === "outdoor", 'Property "training_type" has invalid type', 400);
 
+
     validate(isset($request['description']), 'Property "description" is required', 400);
     validate($request['description'] != '', 'Property "description" must not be empty', 400);
     validate(strlen($request['description']) < 300, 'Property "description" must not be not longer than 300 characters', 400);
 }
 
-$requestMethod = $_SERVER['REQUEST_METHOD'];
-$requestBody = file_get_contents("php://input");
-$parsedRequest = json_decode($requestBody, true);
-
-$connection = mysqli_connect("localhost", "root", "", "fitnesstracker", 3306);
-validate($connection, 'Establishing database connection failed (internal error)', 500);
-
-if ($requestMethod == 'GET') {
-
-    $query = "SELECT recordId, name, timestamp, burned_calories, training_type, description FROM record";
+function getAverageBurnedCalories($connection)
+{
+    $query = "select avg(burned_calories) as average from record";
 
     $stmt = mysqli_prepare($connection, $query);
 
     validate($stmt, 'Failed to prepare SQL statement', 500);
+
+    mysqli_stmt_execute($stmt);
+
+    validate($stmt, 'Failed to execute SQL statement', 500);
+
+    $stmtResult = mysqli_stmt_get_result($stmt);
+
+    $firstRowResult = mysqli_fetch_assoc($stmtResult);
+
+    $averageBurnedCalories = $firstRowResult['average'];
+
+    return floatval($averageBurnedCalories);
+}
+
+$requestMethod = $_SERVER['REQUEST_METHOD'];
+parse_str($_SERVER['QUERY_STRING'], $params);
+$requestBody = file_get_contents("php://input");
+$parsedRequest = json_decode($requestBody, true);
+$connection = mysqli_connect("localhost", "root", "", "fitnesstracker", 3306);
+validate($connection, 'Establishing database connection failed (internal error)', 500);
+
+if ($requestMethod == 'GET') {
+    validateGetRequest($params);
+
+    $trainingType = $params['training_type'];
+
+    $query = "SELECT recordId, name, timestamp, burned_calories, description FROM record where training_type = ?";
+
+    $stmt = mysqli_prepare($connection, $query);
+
+    validate($stmt, 'Failed to prepare SQL statement', 500);
+
+    mysqli_stmt_bind_param($stmt, 's', $trainingType);
+
+    validate($stmt, 'Failed to bind parameters to SQL statement', 500);
 
     mysqli_stmt_execute($stmt);
 
@@ -76,9 +113,10 @@ if ($requestMethod == 'GET') {
 
     header('Content-type: application/json');
     echo json_encode($response);
+    exit;
 
 } elseif ($requestMethod == 'POST') {
-    validateRequest($parsedRequest);
+    validatePostRequest($parsedRequest);
 
     $name = $parsedRequest['name'];
     $timestamp = $parsedRequest['timestamp'];
@@ -100,20 +138,19 @@ if ($requestMethod == 'GET') {
 
     validate($stmtResult, 'Error occured during insertion...', 500);
 
+    $averageBurnedCalories = getAverageBurnedCalories($connection);
+
     mysqli_close($connection);
 
-    if (isset($_COOKIE['inserted_records'])) {
-        $insertedRecords = intval($_COOKIE['inserted_records']);
-        $insertedRecords += 1;
-    } else {
-        $insertedRecords = 1;
-    }
+    setcookie('average_burned_calories', $averageBurnedCalories);
 
-    setcookie('inserted_records', $insertedRecords);
-
-    $response = ['result' => 'Successfully added new training record!'];
+    $response = [
+        'message' => 'Successfully added new training record!',
+        'average_burned_calories' => $averageBurnedCalories
+    ];
 
     header('Content-type: application/json');
     echo json_encode($response);
+    exit;
 }
 ?>
