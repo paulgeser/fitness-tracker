@@ -7,22 +7,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!--     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
- -->
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/helper.js"></script>
     <script src="js/script.js"></script>
 </head>
 
 <body>
     <header>
-        <div class="w3-bar w3-black">
-            <a href="#" class="w3-bar-item w3-button w3-mobile w3-green">ActiveTrack</a>
-            <a href="#" class="w3-bar-item w3-button w3-mobile">Link 1</a>
-            <a href="#" class="w3-bar-item w3-button w3-mobile">Link 2</a>
+        <div>
+            <!-- Sidebar -->
+            <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
+                <button onclick="closeSideBar()" class="w3-bar-item w3-large">Close &times;</button>
+                <a href="#chart" onclick="closeSideBar()" class="w3-bar-item w3-button">Chart</a>
+                <a href="#records" onclick="closeSideBar()" class="w3-bar-item w3-button">My records</a>
+                <a href="#add" onclick="closeSideBar()" class="w3-bar-item w3-button">Add a record</a>
+                <a href="#about" onclick="closeSideBar()" class="w3-bar-item w3-button">About</a>
+            </div>
+
+            <!-- Page Content -->
+            <div class="w3-teal flex-container-row flex-container-align-center w3-padding" id="navbar">
+                <button class="w3-button w3-teal w3-xlarge w3-hide-medium w3-hide-large"
+                    onclick="openSideBar()">☰</button>
+                <div class="w3-container">
+                    <a href="#start">
+                        <h3>ActiveTrack</h3>
+                    </a>
+                </div>
+                <a href="#chart" class="w3-bar-item w3-button w3-hide-small">Chart</a>
+                <a href="#records" class="w3-bar-item w3-button w3-hide-small">My records</a>
+                <a href="#add" class="w3-bar-item w3-button w3-hide-small">Add a record</a>
+                <a href="#about" class="w3-bar-item w3-button w3-hide-small">About</a>
+            </div>
+        </div>
     </header>
 
     <main>
 
+        <section id="start">
+            Here we go to ActiveTrack
+        </section>
+
         <section id="about">
+
+
             <h2>What is training tracker?</h2>
             <div>
                 "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
@@ -65,55 +92,68 @@
 
         <section id="add">
             <h2>Add training record</h2>
-            <div class="w3-container">
-                <div>
-                    <label for="name">Names</label>
-                    <input id="name" name="name" class="w3-input w3-border w3-round-large" type="text" required>
-                </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Panel Heading</div>
+                <div class="panel-body">
+                    <div id="notification-box">
 
-                <div>
-                    <label for="burnedCalories">Burned calories</label>
-                    <input id="burnedCalories" name="burnedCalories" class="w3-input w3-border w3-round-large"
-                        type="number" min="1" max="10000" required>
-                </div>
+                    </div>
+                    <div class="w3-container">
+                        <div>
+                            <label for="name">Names</label>
+                            <input id="name" name="name" class="w3-input w3-border w3-round-large" type="text" required>
+                        </div>
 
-                <div>
-                    <label for="timestamp">Timestamp</label>
-                    <input id="timestamp" name="timestamp" class="w3-input w3-border w3-round-large"
-                        type="datetime-local" step=1 required>
-                </div>
+                        <div>
+                            <label for="burnedCalories">Burned calories</label>
+                            <input id="burnedCalories" name="burnedCalories" class="w3-input w3-border w3-round-large"
+                                type="number" min="1" max="10000" required>
+                        </div>
 
-                <div>
-                    <label for="trainingType">Training type</label>
-                    <select id="trainingType" name="trainingType" class="w3-select w3-border w3-round-large" required>
-                        <option value="" disabled selected>Choose your training type</option>
-                        <option value="outdoor">Outdoor</option>
-                        <option value="indoor">Indoor</option>
-                    </select>
-                </div>
+                        <div>
+                            <label for="timestamp">Timestamp</label>
+                            <input id="timestamp" name="timestamp" class="w3-input w3-border w3-round-large"
+                                type="datetime-local" step=1 required>
+                        </div>
 
-                <div>
-                    <label for="description">Description</label>
-                    <input id="description" name="description" class="w3-input w3-border w3-round-large" type="text"
-                        required>
-                </div>
+                        <div>
+                            <label for="trainingType">Training type</label>
+                            <select id="trainingType" name="trainingType" class="w3-select w3-border w3-round-large"
+                                required>
+                                <option value="" disabled selected>Choose your training type</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="indoor">Indoor</option>
+                            </select>
+                        </div>
 
-                <button onclick="addNewTrainingRecord()">Send to api</button>
+                        <div>
+                            <label for="description">Description</label>
+                            <input id="description" name="description" class="w3-input w3-border w3-round-large"
+                                type="text" required>
+                        </div>
+
+                        <button onclick="addNewTrainingRecord()">Send to api</button>
+                    </div>
+                </div>
             </div>
-        </section>¨
 
-        <section id="table">
-            <h2>Table</h2>
 
-            <div id="table-content">
+        </section>
 
+        <section id="chart">
+            <h2>Line chart</h2>
+            <div>
+                <p>This line chart shows the burned calories of the last 7 days:</p>
+                <canvas id="training-record-chart"></canvas>
             </div>
         </section>
 
-        <section id="diagram">
-            <h2>Diagram</h2>
+        <section id="records">
+            <h2>Records</h2>
+
             <div>
-                <canvas id="training-diagramm"></canvas>
+                <div id="record-content">
+                </div>
             </div>
         </section>
     </main>

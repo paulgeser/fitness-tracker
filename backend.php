@@ -77,7 +77,7 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 parse_str($_SERVER['QUERY_STRING'], $params);
 $requestBody = file_get_contents("php://input");
 $parsedRequest = json_decode($requestBody, true);
-$connection = mysqli_connect("localhost", "root", "", "fitnesstracker", 3306);
+$connection = mysqli_connect("localhost", "root", "", "activetrack", 3306);
 validate($connection, 'Establishing database connection failed (internal error)', 500);
 
 if ($requestMethod == 'GET') {
@@ -85,7 +85,7 @@ if ($requestMethod == 'GET') {
 
     $trainingType = $params['training_type'];
 
-    $query = "SELECT recordId, name, timestamp, burned_calories, description FROM record where training_type = ?";
+    $query = "SELECT record_id, name, timestamp, burned_calories as burnedCalories, description FROM record where training_type = ?";
 
     $stmt = mysqli_prepare($connection, $query);
 
