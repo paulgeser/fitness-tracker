@@ -55,7 +55,7 @@ function loadTrainingRecords() {
         prepareDateForChart(response);
     }
     const trainingType = 'outdoor';
-    const url = `backend.php?training_type=${trainingType}`;
+    const url = `backend?training_type=${trainingType}`;
     xhr.open("GET", url, true);
     xhr.send();
 }
@@ -76,7 +76,7 @@ function addNewTrainingRecord() {
         displayNotification(`Succesfully added training record, your current average calories burn is <b>${response.average_burned_calories}</b>`, 'SUCCESS');
     }
 
-    xhr.open('POST', 'backend.php', true);
+    xhr.open('POST', 'backend', true);
 
     const request = { name, timestamp, burned_calories: burnedCalories, training_type: trainingType, description };
     xhr.send(JSON.stringify(request));
