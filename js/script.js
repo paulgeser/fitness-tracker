@@ -35,11 +35,13 @@ function addTrainingRecordsToDOM(requestResponse) {
         const recordItemDiv = createDivForRecordItem(record);
         contentDiv += recordItemDiv;
     });
+    if (requestResponse.result.length === 0) {
+        contentDiv = "<p>No training records yet registered with current training type selection.</p>";
+    }
     tableContentElement.innerHTML = contentDiv;
 }
 
 let trainingType = 'outdoor';
-
 function loadTrainingRecords() {
     xhr = new XMLHttpRequest();
     xhr.onerror = () => { displayNotification('application error: cannot send request'); }
@@ -89,7 +91,7 @@ const createMessage = (message, color) => {
 
 const createDivForRecordItem = (record) => {
     return `
-    <div class="w3-container w3-border w3-round-large w3-card-2 w3-margin-bottom">
+    <div class="w3-container w3-border w3-round-large w3-card-2 w3-margin-bottom w3-theme-l5">
         <h3>Training ${record.record_id}</h3>
         <p>Burned calories: ${record.burnedCalories}</p>
         <p>When: ${record.timestamp}</p>
@@ -102,7 +104,6 @@ let tempChartData = null;
 // Draw the chart
 function createCaloriesBurnLineChart(chartData) {
     // Check if input data contains actual data, otherwise use last stored tempChartData
-    let chartData;
     if (chartData) {
         tempChartData = chartData;
     } else {

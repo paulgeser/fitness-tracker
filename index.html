@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-w3schools.css">
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/helper.js"></script>
     <script src="js/script.js"></script>
 </head>
 
@@ -25,8 +25,8 @@
             </div>
 
             <!-- Page Content -->
-            <div class="w3-teal flex-container-row flex-container-align-center w3-padding" id="navbar">
-                <button class="w3-button w3-teal w3-xlarge w3-hide-medium w3-hide-large"
+            <div class="w3-theme-d5 flex-container-row flex-container-align-center w3-padding" id="navbar">
+                <button class="w3-button w3-theme-d5 w3-xlarge w3-hide-medium w3-hide-large"
                     onclick="openSideBar()">☰</button>
                 <div class="w3-container">
                     <a href="#start">
@@ -41,7 +41,7 @@
         </div>
     </header>
 
-    <main>
+    <main class="w3-content">
 
         <section id="start">
             Here we go to ActiveTrack
@@ -93,57 +93,55 @@
         <section id="add">
             <h1>Add training record</h1>
             <div class="panel panel-default">
-                <div class="panel-heading">Panel Heading</div>
-                <div class="panel-body">
-                    <div id="notification-box">
+                <div id="notification-box">
 
-                    </div>
-                    <div class="w3-container">
-                        <form id="add-record-form">
-                            <div class="w3-margin-top">
-                                <label for="name">Names</label>
-                                <input id="name" name="name" class="w3-input w3-border w3-round-large" type="text"
-                                    maxlength="45" pattern=".*\S.*" required>
-                                <div id="name-input-error" class="w3-text-red error-message"></div>
-                            </div>
+                </div>
+                <div class="w3-container w3-border w3-theme-l5 w3-round-large w3-card-2 w3-margin-bottom">
+                    <form id="add-record-form">
+                        <div class="w3-margin-top">
+                            <label for="name">Names</label>
+                            <input id="name" name="name" class="w3-input w3-border w3-round-large" type="text"
+                                maxlength="45" pattern=".*\S.*" required>
+                            <div id="name-input-error" class="w3-text-red error-message"></div>
+                        </div>
 
-                            <div class="w3-margin-top">
-                                <label for="burnedCalories">Burned calories</label>
-                                <input id="burnedCalories" name="burnedCalories"
-                                    class="w3-input w3-border w3-round-large" type="number" min="1" max="10000"
-                                    required>
-                                <div id="burnedCalories-input-error" class="w3-text-red error-message"></div>
-                            </div>
+                        <div class="w3-margin-top">
+                            <label for="burnedCalories">Burned calories</label>
+                            <input id="burnedCalories" name="burnedCalories" class="w3-input w3-border w3-round-large"
+                                type="number" min="1" max="10000" required>
+                            <div id="burnedCalories-input-error" class="w3-text-red error-message"></div>
+                        </div>
 
-                            <div class="w3-margin-top">
-                                <label for="timestamp">Timestamp</label>
-                                <input id="timestamp" name="timestamp" class="w3-input w3-border w3-round-large"
-                                    type="datetime-local" step=1 required>
-                                <div id="timestamp-input-error" class="w3-text-red error-message"></div>
-                            </div>
+                        <div class="w3-margin-top">
+                            <label for="timestamp">Timestamp</label>
+                            <input id="timestamp" name="timestamp" class="w3-input w3-border w3-round-large"
+                                type="datetime-local" step=1 required>
+                            <div id="timestamp-input-error" class="w3-text-red error-message"></div>
+                        </div>
 
-                            <div class="w3-margin-top">
-                                <label for="trainingType">Training type</label>
-                                <select id="trainingType" name="trainingType" class="w3-select w3-border w3-round-large"
-                                    required>
-                                    <option value="" disabled selected>Choose your training type</option>
-                                    <option value="outdoor">Outdoor</option>
-                                    <option value="indoor">Indoor</option>
-                                </select>
-                                <div id="trainingType-input-error" class="w3-text-red error-message"></div>
-                            </div>
+                        <div class="w3-margin-top">
+                            <label for="trainingType">Training type</label>
+                            <select id="trainingType" name="trainingType" class="w3-select w3-border w3-round-large"
+                                required>
+                                <option value="" disabled selected>Choose your training type</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="indoor">Indoor</option>
+                            </select>
+                            <div id="trainingType-input-error" class="w3-text-red error-message"></div>
+                        </div>
 
-                            <div class="w3-margin-top">
-                                <label for="description">Description</label>
-                                <textarea id="description" name="description" class="w3-input w3-border w3-round-large"
-                                    rows="4" maxlength="300" pattern required></textarea>
-                                <div id="description-input-error" class="w3-text-red error-message"></div>
-                            </div>
+                        <div class="w3-margin-top">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" class="w3-input w3-border w3-round-large"
+                                rows="4" maxlength="300" pattern required></textarea>
+                            <div id="description-input-error" class="w3-text-red error-message"></div>
+                        </div>
 
-                            <button class="w3-margin-top" onclick="addNewTrainingRecord()" type="button">Send to
-                                api</button>
-                        </form>
-                    </div>
+                        <button class="w3-btn w3-margin-top w3-margin-bottom w3-round-large"
+                            onclick="addNewTrainingRecord()" type="button">Send to
+                            api</button>
+                    </form>
+
                 </div>
             </div>
 
@@ -167,7 +165,9 @@
 
         <section id="records">
             <h2>Records</h2>
-            <div id="record-content"></div>
+            <div id="record-content">
+                <p>No training records yet registered with current training type selection.</p>
+            </div>
         </section>
     </main>
 </body>
