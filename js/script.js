@@ -181,48 +181,29 @@ function createCaloriesBurnLineChart(inputChartData) {
     });
 }
 
+
+function validateField(inputDivId, validatorFunction, errorMessage) {
+    const inputDiv = document.getElementById(inputDivId);
+    const errorDiv = document.getElementById(`${inputDivId}-input-error`);
+    inputDiv.addEventListener("input", () => {
+        errorDiv.innerHTML = inputDiv.validity.valid && validatorFunction(inputDiv.value) ? "" : errorMessage;
+    });
+}
+
 // During resize of window, also resize the chart
 window.addEventListener("resize", () => drawCaloriesBurnLineChart(null));
+
 function validationInit() {
-    const nameInput = document.getElementById("name");
-    const nameInputError = document.getElementById("name-input-error");
-    nameInput.addEventListener("input", event => {
-        const errorMessage = nameInput.validity.valid ? '' : 'This field is required, cannot consist only of spaces and has a max length of 45 characters';
-        nameInputError.innerHTML = errorMessage;
-        console.log(event, nameInput.value, nameInput.validity.valid);
-    });
-
-    const burnedCaloriesInput = document.getElementById("burnedCalories");
-    const burnedCaloriesInputError = document.getElementById("burnedCalories-input-error");
-    burnedCaloriesInput.addEventListener("input", event => {
-        const errorMessage = burnedCaloriesInput.validity.valid ? '' : 'This field is required and the value must be in the range between 1 and 10000';
-        burnedCaloriesInputError.innerHTML = errorMessage;
-        console.log(event, burnedCaloriesInput.value, burnedCaloriesInput.validity.valid);
-    });
-
-    const timestampInput = document.getElementById("timestamp");
-    const timestampInputError = document.getElementById("timestamp-input-error");
-    timestampInput.addEventListener("input", event => {
-        const errorMessage = timestampInput.validity.valid && (new Date(timestampInput.value) < new Date()) ? '' : 'This field is required and cannot be in the future';
-        timestampInputError.innerHTML = errorMessage;
-        console.log(event, timestampInput.value, timestampInput.validity.valid);
-    });
-
-    const trainingTypeInput = document.getElementById("trainingType");
-    const trainingTypeInputError = document.getElementById("trainingType-input-error");
-    trainingTypeInput.addEventListener("input", event => {
-        const errorMessage = trainingTypeInput.validity.valid ? '' : 'This field is required';
-        trainingTypeInputError.innerHTML = errorMessage;
-        console.log(event, trainingTypeInput.value, trainingTypeInput.validity.valid);
-    });
-
-    const descriptionInput = document.getElementById("description");
-    const descriptionInputError = document.getElementById("description-input-error");
-    descriptionInput.addEventListener("input", event => {
-        const errorMessage = descriptionInput.validity.valid && descriptionInput.value.match(/.*\S.*/) ? '' : 'This field is required, cannot consist only of spaces and has a max length of 45 characters';
-        descriptionInputError.innerHTML = errorMessage;
-        console.log(event, descriptionInput.value, descriptionInput.validity.valid);
-    });
+    validateField("name", (value) => !!value.trim(),
+        'This field is required, cannot consist only of spaces and has a max length of 45 characters');
+    validateField("burnedCalories", (_) => true,
+        'This field is required and the value must be in the range between 1 and 10000');
+    validateField("timestamp", (value) => (new Date(value) < new Date()),
+        'This field is required and cannot be in the future');
+    validateField("trainingType", (_) => true,
+        'This field is required');
+    validateField("description", (value) => !!value.trim(),
+        'This field is required, cannot consist only of spaces and has a max length of 300 characters');
 }
 
 
