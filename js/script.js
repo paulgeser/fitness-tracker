@@ -44,12 +44,16 @@ function addTrainingRecordsToDOM(requestResponse) {
 let trainingType = 'outdoor';
 function loadTrainingRecords() {
     xhr = new XMLHttpRequest();
-    xhr.onerror = () => { displayNotification('application error: cannot send request'); }
-    xhr.timeout = () => { displayNotification('application error: timeout'); }
+    xhr.onerror = () => { displayNotification('Application error occured: Cannot send request'); }
+    xhr.timeout = () => { displayNotification('Application error occured: Timeout'); }
     xhr.onload = () => {
-        const response = parseJsonHelper(xhr.responseText);
-        addTrainingRecordsToDOM(response);
-        createCaloriesBurnLineChart(response.chart);
+        if (xhr.status < 400) {
+            const response = parseJsonHelper(xhr.responseText);
+            addTrainingRecordsToDOM(response);
+            createCaloriesBurnLineChart(response.chart);
+        } else {
+            displayNotification(`Application error occured: An http error with code ${xhr.status} occured`, 'ERROR');
+        }
     }
     xhr.open("GET", `backend?training_type=${trainingType}`, true);
     xhr.send();
@@ -65,12 +69,16 @@ function addNewTrainingRecord() {
         const description = document.getElementById('description').value.trim();
 
         let xhr = new XMLHttpRequest();
-        xhr.onerror = () => { displayNotification('application error: cannot send request'); }
-        xhr.timeout = () => { displayNotification('application error: timeout'); }
+        xhr.onerror = () => { displayNotification('Application error occured: Cannot send request'); }
+        xhr.timeout = () => { displayNotification('Application error occured: Timeout'); }
         xhr.onload = () => {
-            const response = parseJsonHelper(xhr.responseText);
-            displayNotification(`${response.message} <br> Your current average calories burn is <b>${response.average_burned_calories}</b>`, 'SUCCESS');
-            loadTrainingRecords();
+            if (xhr.status < 400) {
+                const response = parseJsonHelper(xhr.responseText);
+                displayNotification(`${response.message} <br> Your current average calories burn is <b>${response.average_burned_calories}</b>`, 'SUCCESS');
+                loadTrainingRecords();
+            } else {
+                displayNotification(`Application error occured: An http error with code ${xhr.status} occured`, 'ERROR');
+            }
         }
         xhr.open('POST', 'backend', true);
         const request = { name, timestamp, burned_calories: burnedCalories, training_type: trainingType, description };
