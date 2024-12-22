@@ -30,7 +30,7 @@ function validatePostRequest($request)
 
     validate(isset($request['name']), 'Property "name" is required', 400);
     validate($request['name'] != '', 'Property "name" must not be empty', 400);
-    validate(strlen($request['name']) < 45, 'Property "name" must not be not longer than 45 characters', 400);
+    validate(strlen($request['name']) <= 45, 'Property "name" must not be not longer than 45 characters', 400);
 
 
     validate(isset($request['timestamp']), 'Property "timestamp" is required', 400);
@@ -88,23 +88,18 @@ if ($requestMethod == 'GET') {
     $query = "SELECT record_id, name, timestamp, burned_calories as burnedCalories, description FROM record where training_type = ?";
 
     $stmt = mysqli_prepare($connection, $query);
-
     validate($stmt, 'Failed to prepare SQL statement', 500);
 
     mysqli_stmt_bind_param($stmt, 's', $trainingType);
-
     validate($stmt, 'Failed to bind parameters to SQL statement', 500);
 
     mysqli_stmt_execute($stmt);
-
     validate($stmt, 'Failed to execute SQL statement', 500);
 
     $stmtResult = mysqli_stmt_get_result($stmt);
-
     validate($stmtResult, 'Error occurred when obtaining query result from the database', 500);
 
     $rows = mysqli_fetch_all($stmtResult, MYSQLI_ASSOC);
-
     validate($stmtResult, 'Error occurred when obtaining rows from query result', 500);
 
     mysqli_close($connection);
@@ -127,15 +122,12 @@ if ($requestMethod == 'GET') {
     $query = "insert into record (name, timestamp, burned_calories, training_type, description) values (?, ?, ?, ?, ?)";
 
     $stmt = mysqli_prepare($connection, $query);
-
     validate($stmt, 'Failed to prepare SQL statement', 500);
 
     mysqli_stmt_bind_param($stmt, 'ssiss', $name, $timestamp, $burnedCalories, $trainingType, $description);
-
     validate($stmt, 'Failed to bind parameters to SQL statement', 500);
 
     $stmtResult = mysqli_stmt_execute($stmt);
-
     validate($stmtResult, 'Error occured during insertion...', 500);
 
     $averageBurnedCalories = getAverageBurnedCalories($connection);

@@ -99,40 +99,50 @@
 
                     </div>
                     <div class="w3-container">
-                        <div>
-                            <label for="name">Names</label>
-                            <input id="name" name="name" class="w3-input w3-border w3-round-large" type="text" required>
-                        </div>
+                        <form id="add-record-form">
+                            <div class="w3-margin-top">
+                                <label for="name">Names</label>
+                                <input id="name" name="name" class="w3-input w3-border w3-round-large" type="text"
+                                    maxlength="45" pattern=".*\S.*" required>
+                                <div id="name-input-error" class="w3-text-red error-message"></div>
+                            </div>
 
-                        <div>
-                            <label for="burnedCalories">Burned calories</label>
-                            <input id="burnedCalories" name="burnedCalories" class="w3-input w3-border w3-round-large"
-                                type="number" min="1" max="10000" required>
-                        </div>
+                            <div class="w3-margin-top">
+                                <label for="burnedCalories">Burned calories</label>
+                                <input id="burnedCalories" name="burnedCalories"
+                                    class="w3-input w3-border w3-round-large" type="number" min="1" max="10000"
+                                    required>
+                                <div id="burnedCalories-input-error" class="w3-text-red error-message"></div>
+                            </div>
 
-                        <div>
-                            <label for="timestamp">Timestamp</label>
-                            <input id="timestamp" name="timestamp" class="w3-input w3-border w3-round-large"
-                                type="datetime-local" step=1 required>
-                        </div>
+                            <div class="w3-margin-top">
+                                <label for="timestamp">Timestamp</label>
+                                <input id="timestamp" name="timestamp" class="w3-input w3-border w3-round-large"
+                                    type="datetime-local" step=1 required>
+                                <div id="timestamp-input-error" class="w3-text-red error-message"></div>
+                            </div>
 
-                        <div>
-                            <label for="trainingType">Training type</label>
-                            <select id="trainingType" name="trainingType" class="w3-select w3-border w3-round-large"
-                                required>
-                                <option value="" disabled selected>Choose your training type</option>
-                                <option value="outdoor">Outdoor</option>
-                                <option value="indoor">Indoor</option>
-                            </select>
-                        </div>
+                            <div class="w3-margin-top">
+                                <label for="trainingType">Training type</label>
+                                <select id="trainingType" name="trainingType" class="w3-select w3-border w3-round-large"
+                                    required>
+                                    <option value="" disabled selected>Choose your training type</option>
+                                    <option value="outdoor">Outdoor</option>
+                                    <option value="indoor">Indoor</option>
+                                </select>
+                                <div id="trainingType-input-error" class="w3-text-red error-message"></div>
+                            </div>
 
-                        <div>
-                            <label for="description">Description</label>
-                            <input id="description" name="description" class="w3-input w3-border w3-round-large"
-                                type="text" required>
-                        </div>
+                            <div class="w3-margin-top">
+                                <label for="description">Description</label>
+                                <textarea id="description" name="description" class="w3-input w3-border w3-round-large"
+                                    rows="4" maxlength="300" pattern required></textarea>
+                                <div id="description-input-error" class="w3-text-red error-message"></div>
+                            </div>
 
-                        <button onclick="addNewTrainingRecord()">Send to api</button>
+                            <button class="w3-margin-top" onclick="addNewTrainingRecord()" type="button">Send to
+                                api</button>
+                        </form>
                     </div>
                 </div>
             </div>
