@@ -46,7 +46,7 @@ function loadTrainingRecords() {
         const response = parseJsonHelper(xhr.responseText);
         console.log(response);
         addTrainingRecordsToDOM(response);
-        prepareDateForChart(response);
+        createCaloriesBurnLineChart(response.chart);
     }
     const trainingType = 'outdoor';
     const url = `backend?training_type=${trainingType}`;
@@ -71,10 +71,10 @@ function addNewTrainingRecord() {
             const response = parseJsonHelper(xhr.responseText);
             console.log(response);
             displayNotification(`Succesfully added training record, your current average calories burn is <b>${response.average_burned_calories}</b>`, 'SUCCESS');
+            loadTrainingRecords();
         }
 
         xhr.open('POST', 'backend', true);
-
         const request = { name, timestamp, burned_calories: burnedCalories, training_type: trainingType, description };
         xhr.send(JSON.stringify(request));
     } else {
@@ -85,50 +85,6 @@ function addNewTrainingRecord() {
         });
     }
 }
-
-function prepareDateForChart(response) {
-    let date = new Date();
-    const chartData = [];
-    chartData.push({
-        label: date.toString().split(' ')[0],
-        date: date.getDate(),
-        month: date.getMonth(),
-        burnedCalories: 0,
-        xPosition: 0.8,
-        yPosition: 0
-    });
-    let xPositionValue = 0.8;
-    for (let i = 0; i < 6; i++) {
-        xPositionValue = Number(Number(xPositionValue - 0.1).toFixed(1));
-        date.setDate(date.getDate() - 1);
-        chartData.push({
-            label: date.toString().split(' ')[0],
-            date: date.getDate(),
-            month: date.getMonth(),
-            burnedCalories: 0,
-            xPosition: xPositionValue,
-            yPosition: 0
-        });
-    }
-
-    if (response.result.length !== 0) {
-        chartData.forEach(chartDataItem => {
-            response.result.forEach(recordItem => {
-                const recordItemDate = new Date(recordItem.timestamp);
-                if (recordItemDate.getDate() === chartDataItem.date && recordItemDate.getMonth() === chartDataItem.month) {
-                    chartDataItem.burnedCalories += recordItem.burnedCalories;
-                }
-            });
-        });
-    }
-    const maxBurnedCalories = Math.max(...chartData.map(x => x.burnedCalories))
-    chartData.forEach(chartDataItem => {
-        chartDataItem.yPosition = (1 - (chartDataItem.burnedCalories / maxBurnedCalories) * 0.8 - 0.1);
-    })
-    chartData.reverse();
-    drawCaloriesBurnLineChart(chartData)
-}
-
 
 const createMessage = (message, color) => {
     return `
@@ -152,7 +108,7 @@ const createDivForRecordItem = (record) => {
 let tempChartData = null;
 
 // Draw the chart
-function drawCaloriesBurnLineChart(inputChartData) {
+function createCaloriesBurnLineChart(inputChartData) {
 
     // Check if input data contains actual data, otherwise use last stored tempChartData
     let chartData;
@@ -188,7 +144,7 @@ function drawCaloriesBurnLineChart(inputChartData) {
     ctx.font = "14px Arial";
     ctx.textAlign = "center";
     chartData.forEach((pointData, index) => {
-        ctx.fillText(pointData.label, chartData[index].xPosition * width, 0.95 * height);
+        ctx.fillText(pointData.labelName, chartData[index].xPosition * width, 0.95 * height);
     });
 
     // Add calories burn label to canvas (vertical labels)
