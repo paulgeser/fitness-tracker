@@ -50,7 +50,7 @@
         <section id="about">
 
 
-            <h2>What is training tracker?</h2>
+            <h1>What is training tracker?</h1>
             <div>
                 "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
                 deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
@@ -91,7 +91,7 @@
         </section>
 
         <section id="add">
-            <h2>Add training record</h2>
+            <h1>Add training record</h1>
             <div class="panel panel-default">
                 <div class="panel-heading">Panel Heading</div>
                 <div class="panel-body">
@@ -149,7 +149,14 @@
 
 
         </section>
-
+        <h1>Saved data</h1>
+        <p>Please select type of training data that should be shown:</p>
+        <label for="trainingType-data-output">Training type</label>
+        <select id="trainingType-data-output" name="trainingType-data-output" class="w3-select w3-border w3-round-large"
+            required>
+            <option value="outdoor" selected>Outdoor</option>
+            <option value="indoor">Indoor</option>
+        </select>
         <section id="chart">
             <h2>Line chart</h2>
             <div>
@@ -160,11 +167,7 @@
 
         <section id="records">
             <h2>Records</h2>
-
-            <div>
-                <div id="record-content">
-                </div>
-            </div>
+            <div id="record-content"></div>
         </section>
     </main>
 </body>

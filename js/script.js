@@ -38,17 +38,18 @@ function addTrainingRecordsToDOM(requestResponse) {
     tableContentElement.innerHTML = contentDiv;
 }
 
+let trainingType = 'outdoor';
+
 function loadTrainingRecords() {
     xhr = new XMLHttpRequest();
     xhr.onerror = () => { displayNotification('application error: cannot send request'); }
     xhr.timeout = () => { displayNotification('application error: timeout'); }
     xhr.onload = () => {
         const response = parseJsonHelper(xhr.responseText);
-        console.log(response);
         addTrainingRecordsToDOM(response);
         createCaloriesBurnLineChart(response.chart);
     }
-    const trainingType = 'outdoor';
+
     const url = `backend?training_type=${trainingType}`;
     xhr.open("GET", url, true);
     xhr.send();
@@ -56,7 +57,6 @@ function loadTrainingRecords() {
 
 function addNewTrainingRecord() {
     const formDiv = document.getElementById("add-record-form");
-    console.log();
     if (formDiv.checkValidity()) {
         const name = document.getElementById('name').value.trim();
         const timestamp = document.getElementById('timestamp').value.trim().replace('T', ' ');
@@ -69,7 +69,6 @@ function addNewTrainingRecord() {
         xhr.timeout = () => { displayNotification('application error: timeout'); }
         xhr.onload = () => {
             const response = parseJsonHelper(xhr.responseText);
-            console.log(response);
             displayNotification(`Succesfully added training record, your current average calories burn is <b>${response.average_burned_calories}</b>`, 'SUCCESS');
             loadTrainingRecords();
         }
@@ -97,7 +96,7 @@ const createMessage = (message, color) => {
 const createDivForRecordItem = (record) => {
     return `
     <div class="w3-container w3-border w3-round-large w3-card-2 w3-margin-bottom">
-        <h2>Training ${record.record_id}</h2>
+        <h3>Training ${record.record_id}</h3>
         <p>Burned calories: ${record.burnedCalories}</p>
         <p>When: ${record.timestamp}</p>
         <p>${record.description}</p>
@@ -181,7 +180,6 @@ function createCaloriesBurnLineChart(inputChartData) {
     });
 }
 
-
 function validateField(inputDivId, validatorFunction, errorMessage) {
     const inputDiv = document.getElementById(inputDivId);
     const errorDiv = document.getElementById(`${inputDivId}-input-error`);
@@ -191,7 +189,7 @@ function validateField(inputDivId, validatorFunction, errorMessage) {
 }
 
 // During resize of window, also resize the chart
-window.addEventListener("resize", () => drawCaloriesBurnLineChart(null));
+window.addEventListener("resize", () => createCaloriesBurnLineChart(null));
 
 function validationInit() {
     validateField("name", (value) => !!value.trim(),
@@ -206,8 +204,11 @@ function validationInit() {
         'This field is required, cannot consist only of spaces and has a max length of 300 characters');
 }
 
-
 document.addEventListener("DOMContentLoaded", (event) => {
     loadTrainingRecords();
     validationInit();
+    document.getElementById("trainingType-data-output").addEventListener("input", (trainingTypeEvent) => {
+        trainingType = trainingTypeEvent.target.value;
+        loadTrainingRecords();
+    });
 });

@@ -9,11 +9,15 @@ function validate($condition, $message, $code)
     }
 }
 
-function isValidMySQLDatetime($datetime)
+function isValidMySQLDatetimeAndNotInTheFuture($datetime)
 {
+    $current_date = new DateTime();
     $format = 'Y-m-d H:i:s';
     $dt = DateTime::createFromFormat($format, $datetime);
-    return $dt && $dt->format($format) === $datetime;
+    if (!($dt && $dt->format($format) === $datetime)) {
+        return false;
+    }
+    return new DateTime($datetime) < $current_date;
 }
 
 function validateGetRequest($params)
@@ -33,7 +37,7 @@ function validatePostRequest($request)
 
     validate(isset($request['timestamp']), 'Property "timestamp" is required', 400);
     validate($request['timestamp'] != '', 'Property "timestamp" must not be empty', 400);
-    validate(isValidMySQLDatetime($request['timestamp']), 'Property "timestamp" is not valid datetime format', 400);
+    validate(isValidMySQLDatetimeAndNotInTheFuture($request['timestamp']), 'Property "timestamp" is not valid datetime format and cannot be in the future', 400);
 
     validate(isset($request['burned_calories']), 'Property "burned_calories" is required', 400);
     $burnedCalories = intval($request['burned_calories']);
@@ -75,11 +79,11 @@ function prepareDataForLineChart($response)
         'month' => $currentDate->format('m'),
         'burnedCalories' => 0,
         'xPosition' => 0.8,
-        'yPosition' => 0
+        'yPosition' => 0.9
     ]);
     $xPositionValue = 0.8;
     for ($i = 0; $i < 6; $i++) {
-        $xPositionValue = (float)number_format((float) ($xPositionValue - 0.1), 1, '.', '');
+        $xPositionValue = (float) number_format((float) ($xPositionValue - 0.1), 1, '.', '');
         $currentDate->modify('-1 day');
         array_push($chartData, [
             'labelName' => $currentDate->format('D'),
@@ -87,7 +91,7 @@ function prepareDataForLineChart($response)
             'month' => $currentDate->format('m'),
             'burnedCalories' => 0,
             'xPosition' => $xPositionValue,
-            'yPosition' => 0
+            'yPosition' => 0.9
         ]);
     }
     if (count(value: $response) !== 0) {
@@ -102,14 +106,12 @@ function prepareDataForLineChart($response)
                 }
             }
         }
-    }
-
-    $maxBurnedCalories = max(array_column($chartData, 'burnedCalories'));
-
-    foreach ($chartData as &$chartDataItem) {
-        $chartDataItem['yPosition'] = 1 - (($chartDataItem['burnedCalories'] / $maxBurnedCalories) * 0.8 + 0.1);
-        unset($chartDataItem['date']);
-        unset($chartDataItem['month']);
+        $maxBurnedCalories = max(array_column($chartData, 'burnedCalories'));
+        foreach ($chartData as &$chartDataItem) {
+            $chartDataItem['yPosition'] = 1 - (($chartDataItem['burnedCalories'] / $maxBurnedCalories) * 0.8 + 0.1);
+            unset($chartDataItem['date']);
+            unset($chartDataItem['month']);
+        }
     }
     return $chartData;
 }
