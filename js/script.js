@@ -49,9 +49,7 @@ function loadTrainingRecords() {
         addTrainingRecordsToDOM(response);
         createCaloriesBurnLineChart(response.chart);
     }
-
-    const url = `backend?training_type=${trainingType}`;
-    xhr.open("GET", url, true);
+    xhr.open("GET", `backend?training_type=${trainingType}`, true);
     xhr.send();
 }
 
@@ -72,25 +70,21 @@ function addNewTrainingRecord() {
             displayNotification(`Succesfully added training record, your current average calories burn is <b>${response.average_burned_calories}</b>`, 'SUCCESS');
             loadTrainingRecords();
         }
-
         xhr.open('POST', 'backend', true);
         const request = { name, timestamp, burned_calories: burnedCalories, training_type: trainingType, description };
         xhr.send(JSON.stringify(request));
     } else {
-        let inputElements = document.querySelectorAll("input, select, textarea");
         const inputEvent = new Event('input', { bubbles: true, cancelable: true });
-        inputElements.forEach((input) => {
+        document.querySelectorAll("input, select, textarea").forEach((input) => {
             input.dispatchEvent(inputEvent);
         });
     }
 }
 
 const createMessage = (message, color) => {
-    return `
-    <div class="w3-panel w3-pale-${color} w3-border w3-round-large w3-border-${color}">
+    return `<div class="w3-panel w3-pale-${color} w3-border w3-round-large w3-border-${color}">
         <p>${message}</p>
-    </div>
-    `;
+    </div>`;
 }
 
 const createDivForRecordItem = (record) => {
@@ -105,31 +99,24 @@ const createDivForRecordItem = (record) => {
 }
 
 let tempChartData = null;
-
 // Draw the chart
-function createCaloriesBurnLineChart(inputChartData) {
-
+function createCaloriesBurnLineChart(chartData) {
     // Check if input data contains actual data, otherwise use last stored tempChartData
     let chartData;
-    if (inputChartData) {
-        tempChartData = inputChartData;
-        chartData = inputChartData;
+    if (chartData) {
+        tempChartData = chartData;
     } else {
         chartData = tempChartData;
     }
-
     const canvasElement = document.getElementById("training-record-chart");
     const ctx = canvasElement.getContext("2d");
     // Get real sizes of canvas
-    const rect = canvasElement.getBoundingClientRect();
-    const width = rect.width;
+    const width = canvasElement.getBoundingClientRect().width;
     const height = 350;
-
     // Set sizes correctly and clear current content of canvas
     canvasElement.height = height;
     canvasElement.width = width;
     ctx.clearRect(0, 0, width, height);
-
     // Add lines to canvas
     ctx.beginPath();
     ctx.moveTo(0.15 * width, 35);
@@ -138,29 +125,19 @@ function createCaloriesBurnLineChart(inputChartData) {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 2;
     ctx.stroke();
-
     // Add weekdays to canvas (horizontal labels)
     ctx.font = "14px Arial";
     ctx.textAlign = "center";
     chartData.forEach((pointData, index) => {
         ctx.fillText(pointData.labelName, chartData[index].xPosition * width, 0.95 * height);
     });
-
     // Add calories burn label to canvas (vertical labels)
-    const maxBurnedCalories = Math.max(...chartData.map(x => x.burnedCalories))
-    const verticalLabels = [
-        { name: 0, yPosition: 315 },
-        { name: Math.round(maxBurnedCalories * 0.25), yPosition: 245 },
-        { name: Math.round(maxBurnedCalories * 0.5), yPosition: 175 },
-        { name: Math.round(maxBurnedCalories * 0.75), yPosition: 105 },
-        { name: Math.round(maxBurnedCalories), yPosition: 35 }
-    ];
+    const maxBurnedCalories = Math.max(...chartData.map(x => x.burnedCalories));
     ctx.font = "14px Arial";
-    ctx.textAlign = "right";
-    verticalLabels.forEach((label) => {
-        ctx.fillText(label.name, 0.1 * width, label.yPosition);
+    [0, 0.25, 0.5, 0.75, 1].forEach((f, i) => {
+        ctx.textAlign = "right";
+        ctx.fillText(Math.round(maxBurnedCalories * f), 0.1 * width, 315 - i * 70);
     });
-
     // Draw calories burn line to canvas
     ctx.beginPath();
     ctx.moveTo(chartData[0].xPosition * width, chartData[0].yPosition * height);
@@ -170,7 +147,6 @@ function createCaloriesBurnLineChart(inputChartData) {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 2;
     ctx.stroke();
-
     // Add data points to canvas 
     ctx.fillStyle = "black";
     chartData.forEach(point => {
@@ -187,7 +163,6 @@ function validateField(inputDivId, validatorFunction, errorMessage) {
         errorDiv.innerHTML = inputDiv.validity.valid && validatorFunction(inputDiv.value) ? "" : errorMessage;
     });
 }
-
 // During resize of window, also resize the chart
 window.addEventListener("resize", () => createCaloriesBurnLineChart(null));
 
