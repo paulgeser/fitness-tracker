@@ -180,10 +180,12 @@ if ($requestMethod == 'GET') {
 
     mysqli_close($connection);
 
-    setcookie('average_burned_calories', $averageBurnedCalories);
+    $countTrainingRecords = isset($_COOKIE["count_training_records"]) ? intval($_COOKIE["count_training_records"]) + 1 : 1;
+
+    setcookie("count_training_records", $countTrainingRecords);
 
     $response = [
-        'message' => 'Successfully added new training record!',
+        'message' => 'Successfully added new training record! (You have saved ' . $countTrainingRecords . ' records so far)',
         'average_burned_calories' => $averageBurnedCalories
     ];
 

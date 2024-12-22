@@ -20,8 +20,7 @@
                 <button onclick="closeSideBar()" class="w3-bar-item w3-large">Close &times;</button>
                 <a href="#about" onclick="closeSideBar()" class="w3-bar-item w3-button">About</a>
                 <a href="#add" onclick="closeSideBar()" class="w3-bar-item w3-button">Add a record</a>
-                <a href="#chart" onclick="closeSideBar()" class="w3-bar-item w3-button">Chart</a>
-                <a href="#records" onclick="closeSideBar()" class="w3-bar-item w3-button">My records</a>
+                <a href="#pastdata" onclick="closeSideBar()" class="w3-bar-item w3-button">Past data</a>
             </div>
 
             <!-- Page Content -->
@@ -35,8 +34,7 @@
                 </div>
                 <a href="#about" class="w3-bar-item w3-button w3-hide-small">About</a>
                 <a href="#add" class="w3-bar-item w3-button w3-hide-small">Add a record</a>
-                <a href="#chart" class="w3-bar-item w3-button w3-hide-small">Chart</a>
-                <a href="#records" class="w3-bar-item w3-button w3-hide-small">My records</a>
+                <a href="#pastdata" class="w3-bar-item w3-button w3-hide-small">Past data</a>
             </div>
         </div>
     </header>
@@ -47,13 +45,11 @@
             <h1>ActiveTrack:
                 <i>Track your burned calories</i>
             </h1>
-            <img class="w3-image" src="./img/exercising.jpg" />
+            <img class="w3-image" src="./img/exercising.jpg" alt="man doing exercises">
             <p>https://www.pexels.com/photo/man-in-gray-jacket-doing-push-ups-during-sunrise-3775164/</p>
         </section>
 
         <section id="about">
-
-
             <h1>What is ActiveTrack really?</h1>
             <div>
                 <p>ActiveTrack is a user-friendly fitness tracking application that helps you monitor and analyze the
@@ -80,22 +76,20 @@
         <section id="add">
             <h1>Add training record</h1>
             <div class="panel panel-default">
-                <div id="notification-box">
-
-                </div>
                 <div class="w3-container w3-border w3-theme-l5 w3-round-large w3-card-2 w3-margin-bottom">
                     <form id="add-record-form">
                         <div class="w3-margin-top">
-                            <label for="name">Names</label>
+                            <label for="name">Name</label>
                             <input id="name" name="name" class="w3-input w3-border w3-round-large" type="text"
-                                maxlength="45" pattern=".*\S.*" required>
+                                maxlength="45" pattern=".*\S.*" required placeholder="Please enter a name...">
                             <div id="name-input-error" class="w3-text-red error-message"></div>
                         </div>
 
                         <div class="w3-margin-top">
                             <label for="burnedCalories">Burned calories</label>
                             <input id="burnedCalories" name="burnedCalories" class="w3-input w3-border w3-round-large"
-                                type="number" min="1" max="10000" required>
+                                type="number" min="1" max="10000" required
+                                placeholder="Please enter amount of burned calories...">
                             <div id="burnedCalories-input-error" class="w3-text-red error-message"></div>
                         </div>
 
@@ -120,37 +114,38 @@
                         <div class="w3-margin-top">
                             <label for="description">Description</label>
                             <textarea id="description" name="description" class="w3-input w3-border w3-round-large"
-                                rows="4" maxlength="300" pattern required></textarea>
+                                rows="4" maxlength="300" required
+                                placeholder="Please enter a description..."></textarea>
                             <div id="description-input-error" class="w3-text-red error-message"></div>
                         </div>
 
                         <button class="w3-btn w3-margin-top w3-margin-bottom w3-round-large"
                             onclick="addNewTrainingRecord()" type="button">Send to
-                            api</button>
+                            api
+                        </button>
+                        <div id="notification-box"></div>
                     </form>
-
                 </div>
             </div>
 
-
         </section>
-        <h1>Saved data</h1>
-        <p>Please select type of training data that should be shown:</p>
-        <label for="trainingType-data-output">Training type</label>
-        <select id="trainingType-data-output" name="trainingType-data-output" class="w3-select w3-border w3-round-large"
-            required>
-            <option value="outdoor" selected>Outdoor</option>
-            <option value="indoor">Indoor</option>
-        </select>
-        <section id="chart">
+
+        <section id="pastdata">
+            <h1>Past data</h1>
+            <p>Please select type of training data that should be shown:</p>
+            <label for="trainingType-data-output">Training type</label>
+            <select id="trainingType-data-output" name="trainingType-data-output"
+                class="w3-select w3-border w3-round-large" required>
+                <option value="" disabled>Choose the training type</option>
+                <option value="outdoor" selected>Outdoor</option>
+                <option value="indoor">Indoor</option>
+            </select>
             <h2>Line chart</h2>
             <div>
                 <p>This line chart shows the burned calories of the last 7 days:</p>
                 <canvas id="training-record-chart"></canvas>
             </div>
-        </section>
 
-        <section id="records">
             <h2>Records</h2>
             <div id="record-content">
                 <p>No training records yet registered with current training type selection.</p>

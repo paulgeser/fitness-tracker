@@ -69,7 +69,7 @@ function addNewTrainingRecord() {
         xhr.timeout = () => { displayNotification('application error: timeout'); }
         xhr.onload = () => {
             const response = parseJsonHelper(xhr.responseText);
-            displayNotification(`Succesfully added training record, your current average calories burn is <b>${response.average_burned_calories}</b>`, 'SUCCESS');
+            displayNotification(`${response.message} <br> Your current average calories burn is <b>${response.average_burned_calories}</b>`, 'SUCCESS');
             loadTrainingRecords();
         }
         xhr.open('POST', 'backend', true);
