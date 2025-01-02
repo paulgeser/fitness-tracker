@@ -64,8 +64,8 @@ function addNewTrainingRecord() {
     if (formDiv.checkValidity()) {
         const name = document.getElementById('name').value.trim();
         const timestamp = document.getElementById('timestamp').value.trim().replace('T', ' ');
-        const burnedCalories = document.getElementById('burnedCalories').value.trim();;
-        const trainingType = document.getElementById('trainingType').value.trim();;
+        const burnedCalories = document.getElementById('burnedCalories').value.trim();
+        const trainingType = document.getElementById('trainingType').value.trim();
         const description = document.getElementById('description').value.trim();
 
         let xhr = new XMLHttpRequest();
@@ -102,8 +102,8 @@ const createDivForRecordItem = (record) => {
     const time = record.timestamp.split(' ')[1].slice(0, -3);
     return `<div class="w3-container w3-border w3-round-large w3-card-2 w3-margin-bottom w3-theme-l5">
         <h3>Training ${record.record_id}</h3>
-        <p><b><i>Burned calories</i></b>: ${record.burnedCalories}</p>
-        <p><b><i>Time of training</i></b>: On the ${date} at ${time}</p>
+        <p>Burned calories: ${record.burnedCalories}</p>
+        <p>Time of training: On the ${date} at ${time}</p>
         <p>${record.description}</p>
     </div>`;
 }

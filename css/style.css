@@ -16,3 +16,7 @@
 .error-message {
     font-size: 12px;
 }
+
+#activetrack-sidebar {
+    display: none;
+}

@@ -1,5 +1,4 @@
 <?php
-
 function validate($condition, $message, $code)
 {
     if (!$condition) {
@@ -54,7 +53,6 @@ function validatePostRequest($request)
 function getAverageBurnedCalories($connection)
 {
     $query = "select avg(burned_calories) as average from record";
-
     $stmt = mysqli_prepare($connection, $query);
     validate($stmt, 'Failed to prepare SQL statement', 500);
 
@@ -77,6 +75,7 @@ function prepareDataForLineChart($response)
         'labelName' => $currentDate->format('D'),
         'date' => $currentDate->format('d'),
         'month' => $currentDate->format('m'),
+        'year' => $currentDate->format('Y'),
         'burnedCalories' => 0,
         'xPosition' => 0.8,
         'yPosition' => 0.9
@@ -89,6 +88,7 @@ function prepareDataForLineChart($response)
             'labelName' => $currentDate->format('D'),
             'date' => $currentDate->format('d'),
             'month' => $currentDate->format('m'),
+            'year' => $currentDate->format('Y'),
             'burnedCalories' => 0,
             'xPosition' => $xPositionValue,
             'yPosition' => 0.9
@@ -100,7 +100,8 @@ function prepareDataForLineChart($response)
                 $responseDataItemTimeStamp = new DateTime($responseDataItem['timestamp']);
                 if (
                     $chartDataItem['date'] === $responseDataItemTimeStamp->format('d') &&
-                    $chartDataItem['month'] === $responseDataItemTimeStamp->format('m')
+                    $chartDataItem['month'] === $responseDataItemTimeStamp->format('m') &&
+                    $chartDataItem['year'] === $responseDataItemTimeStamp->format('Y')
                 ) {
                     $chartDataItem['burnedCalories'] += $responseDataItem['burnedCalories'];
                 }
@@ -108,9 +109,12 @@ function prepareDataForLineChart($response)
         }
         $maxBurnedCalories = max(array_column($chartData, 'burnedCalories'));
         foreach ($chartData as &$chartDataItem) {
-            $chartDataItem['yPosition'] = 1 - (($chartDataItem['burnedCalories'] / $maxBurnedCalories) * 0.8 + 0.1);
+            if ($maxBurnedCalories != 0) {
+                $chartDataItem['yPosition'] = 1 - (($chartDataItem['burnedCalories'] / $maxBurnedCalories) * 0.8 + 0.1);
+            }
             unset($chartDataItem['date']);
             unset($chartDataItem['month']);
+            unset($chartDataItem['year']);
         }
     }
     return $chartData;
@@ -127,9 +131,7 @@ if ($requestMethod == 'GET') {
     validateGetRequest($params);
 
     $trainingType = $params['training_type'];
-
     $query = "SELECT record_id, name, timestamp, burned_calories as burnedCalories, description FROM record where training_type = ?";
-
     $stmt = mysqli_prepare($connection, $query);
     validate($stmt, 'Failed to prepare SQL statement', 500);
 
@@ -144,14 +146,12 @@ if ($requestMethod == 'GET') {
 
     $rows = mysqli_fetch_all($stmtResult, MYSQLI_ASSOC);
     validate($stmtResult, 'Error occurred when obtaining rows from query result', 500);
-
     mysqli_close($connection);
 
     $response = [
         'result' => $rows,
         'chart' => prepareDataForLineChart($rows)
     ];
-
     header('Content-type: application/json');
     echo json_encode($response);
     exit;
@@ -166,7 +166,6 @@ if ($requestMethod == 'GET') {
     $description = $parsedRequest['description'];
 
     $query = "insert into record (name, timestamp, burned_calories, training_type, description) values (?, ?, ?, ?, ?)";
-
     $stmt = mysqli_prepare($connection, $query);
     validate($stmt, 'Failed to prepare SQL statement', 500);
 
@@ -188,7 +187,6 @@ if ($requestMethod == 'GET') {
         'message' => 'Successfully added new training record! (You have saved ' . $countTrainingRecords . ' records so far)',
         'average_burned_calories' => $averageBurnedCalories
     ];
-
     header('Content-type: application/json');
     echo json_encode($response);
     exit;

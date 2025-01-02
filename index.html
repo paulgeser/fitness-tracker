@@ -16,17 +16,18 @@
     <header>
         <div>
             <!-- Sidebar -->
-            <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="activetrack-sidebar">
+            <div class="w3-sidebar w3-bar-block w3-border-right" id="activetrack-sidebar">
                 <button onclick="closeSideBar()" class="w3-bar-item w3-large">Close &times;</button>
                 <a href="#about" onclick="closeSideBar()" class="w3-bar-item w3-button">About</a>
                 <a href="#add" onclick="closeSideBar()" class="w3-bar-item w3-button">Add a record</a>
                 <a href="#pastdata" onclick="closeSideBar()" class="w3-bar-item w3-button">Past data</a>
             </div>
 
-            <!-- Page Content -->
+            <!-- Nav bar content-->
             <div class="w3-theme-d5 flex-container-row flex-container-align-center w3-padding" id="navbar">
-                <button class="w3-button w3-theme-d5 w3-xlarge w3-hide-medium w3-hide-large"
-                    onclick="openSideBar()">☰</button>
+                <button class="w3-button w3-theme-d5 w3-xlarge w3-hide-medium w3-hide-large" onclick="openSideBar()">
+                    ☰
+                </button>
                 <div class="w3-container">
                     <a href="#start">
                         <h3>ActiveTrack</h3>
@@ -39,40 +40,62 @@
         </div>
     </header>
 
+    <!-- Main page content -->
     <main class="w3-content">
-
+        <!-- Start section -->
         <section id="start">
             <h1 class="w3-center">ActiveTrack:
                 <i>Track your burned calories</i>
             </h1>
             <img id="training-image" class="w3-image" src="./img/exercising.jpg" alt="man doing exercises">
-            <p>https://www.pexels.com/photo/man-in-gray-jacket-doing-push-ups-during-sunrise-3775164/</p>
+            <p>
+                Source of image:
+                <a href="https://www.pexels.com/photo/man-in-gray-jacket-doing-push-ups-during-sunrise-3775164/"
+                    target="_blank">
+                    Pexels Photo
+                </a>
+            </p>
         </section>
 
+        <!-- About section -->
         <section id="about">
             <h1>What is ActiveTrack really?</h1>
             <div>
                 <p>ActiveTrack is a user-friendly fitness tracking application that helps you monitor and analyze the
-                    calories you burn during different types of physical activities. Whether you're running outdoors or
-                    exercising indoors, ActiveTrack makes it easy to log your training sessions, track your progress,
-                    and visualize your results through a line chart!</p>
+                    calories. Whether you're running outdoors or exercising indoors, ActiveTrack makes it easy to log
+                    your
+                    training sessions, track your progress and visualize your results through a line chart!</p>
 
                 <p>Using ActiveTrack is simple and straightforward:</p>
                 <ul>
-                    <li><strong>Log your workouts:</strong> Start by adding your training records. Fill in details like
-                        the type of activity, calories burned, training type (indoor or outdoor), and a short
-                        description of the workout.</li>
-                    <li><strong>View your progress:</strong> Check your records to see your burned calories over time.
-                        You can filter your data by the type of training and see the results in a line chart, helping
-                        you track your performance over the past 7 days.</li>
-                    <li><strong>Analyze your data:</strong> The line chart visually represents your calories burned,
-                        making it easy to spot trends and improvements.</li>
-                    <li><strong>Stay motivated:</strong> By keeping track of your progress, you can push yourself to
-                        achieve new fitness milestones and stay consistent in your workouts!</li>
+                    <li>
+                        <strong>Log your workouts:</strong>
+                        Just navigate a bit further down and use the form to start
+                        adding your training records. Fill in details like the type of activity, calories burned,
+                        training type (indoor or outdoor), the training time and a short description of the workout.
+                    </li>
+                    <li>
+                        <strong>View your progress:</strong>
+                        Immediately after adding a training record it will show you
+                        how many training records you have added so far including an average calories burn. In the past
+                        data section you can filter your data by the type of training and see the results in a line
+                        chart, helping you track your performance over the past 7 days.
+                    </li>
+                    <li>
+                        <strong>Analyze your data:</strong>
+                        The line chart visually represents your calories burned,
+                        making it easy to spot trends and improvements.
+                    </li>
+                    <li>
+                        <strong>Stay motivated:</strong>
+                        By keeping track of your progress, you can push yourself to
+                        achieve new fitness milestones and stay consistent in your workouts!
+                    </li>
                 </ul>
             </div>
         </section>
 
+        <!-- Add section -->
         <section id="add">
             <h1>Add training record</h1>
             <div class="panel panel-default">
@@ -120,16 +143,16 @@
                         </div>
 
                         <button class="w3-btn w3-margin-top w3-margin-bottom w3-round-large"
-                            onclick="addNewTrainingRecord()" type="button">Send to
-                            api
+                            onclick="addNewTrainingRecord()" type="button">
+                            Submit new record
                         </button>
                         <div id="notification-box"></div>
                     </form>
                 </div>
             </div>
-
         </section>
 
+        <!-- Past data section -->
         <section id="pastdata">
             <h1>Past data</h1>
             <p>Please select type of training data that should be shown:</p>
