@@ -61,13 +61,13 @@ function loadTrainingRecords() {
 
 function addNewTrainingRecord() {
     const formDiv = document.getElementById("add-record-form");
-    if (formDiv.checkValidity()) {
-        const name = document.getElementById('name').value.trim();
-        const timestamp = document.getElementById('timestamp').value.trim().replace('T', ' ');
-        const burnedCalories = document.getElementById('burnedCalories').value.trim();
-        const trainingType = document.getElementById('trainingType').value.trim();
-        const description = document.getElementById('description').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const timestamp = document.getElementById('timestamp').value.trim().replace('T', ' ');
+    const burnedCalories = document.getElementById('burnedCalories').value.trim();
+    const trainingType = document.getElementById('trainingType').value.trim();
+    const description = document.getElementById('description').value.trim();
 
+    if (formDiv.checkValidity() && new Date(timestamp) < new Date()) {
         let xhr = new XMLHttpRequest();
         xhr.onerror = () => { displayNotification('Application error occured: Cannot send request'); }
         xhr.timeout = () => { displayNotification('Application error occured: Timeout'); }
@@ -102,6 +102,7 @@ const createDivForRecordItem = (record) => {
     const time = record.timestamp.split(' ')[1].slice(0, -3);
     return `<div class="w3-container w3-border w3-round-large w3-card-2 w3-margin-bottom w3-theme-l5">
         <h3>Training ${record.record_id}</h3>
+        <p>Name: ${record.name}</p>
         <p>Burned calories: ${record.burnedCalories}</p>
         <p>Time of training: On the ${date} at ${time}</p>
         <p>${record.description}</p>
