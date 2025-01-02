@@ -16,7 +16,7 @@
     <header>
         <div>
             <!-- Sidebar -->
-            <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
+            <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="activetrack-sidebar">
                 <button onclick="closeSideBar()" class="w3-bar-item w3-large">Close &times;</button>
                 <a href="#about" onclick="closeSideBar()" class="w3-bar-item w3-button">About</a>
                 <a href="#add" onclick="closeSideBar()" class="w3-bar-item w3-button">Add a record</a>
@@ -94,9 +94,9 @@
                         </div>
 
                         <div class="w3-margin-top">
-                            <label for="timestamp">Timestamp</label>
+                            <label for="timestamp">Time of training</label>
                             <input id="timestamp" name="timestamp" class="w3-input w3-border w3-round-large"
-                                type="datetime-local" step=1 required>
+                                type="datetime-local" required>
                             <div id="timestamp-input-error" class="w3-text-red error-message"></div>
                         </div>
 

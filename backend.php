@@ -12,7 +12,7 @@ function validate($condition, $message, $code)
 function isValidMySQLDatetimeAndNotInTheFuture($datetime)
 {
     $current_date = new DateTime();
-    $format = 'Y-m-d H:i:s';
+    $format = 'Y-m-d H:i';
     $dt = DateTime::createFromFormat($format, $datetime);
     if (!($dt && $dt->format($format) === $datetime)) {
         return false;

@@ -1,10 +1,10 @@
 
 function openSideBar() {
-    document.getElementById("mySidebar").style.display = "block";
+    document.getElementById("activetrack-sidebar").style.display = "block";
 }
 
 function closeSideBar() {
-    document.getElementById("mySidebar").style.display = "none";
+    document.getElementById("activetrack-sidebar").style.display = "none";
 }
 
 function parseJsonHelper(text) {
@@ -98,18 +98,17 @@ const createMessage = (message, color) => {
 }
 
 const createDivForRecordItem = (record) => {
-    return `
-    <div class="w3-container w3-border w3-round-large w3-card-2 w3-margin-bottom w3-theme-l5">
+    const date = record.timestamp.split(' ')[0];
+    const time = record.timestamp.split(' ')[1].slice(0, -3);
+    return `<div class="w3-container w3-border w3-round-large w3-card-2 w3-margin-bottom w3-theme-l5">
         <h3>Training ${record.record_id}</h3>
-        <p>Burned calories: ${record.burnedCalories}</p>
-        <p>When: ${record.timestamp}</p>
+        <p><b><i>Burned calories</i></b>: ${record.burnedCalories}</p>
+        <p><b><i>Time of training</i></b>: On the ${date} at ${time}</p>
         <p>${record.description}</p>
-    </div>
-    `;
+    </div>`;
 }
 
 let tempChartData = null;
-// Draw the chart
 function createCaloriesBurnLineChart(chartData) {
     // Check if input data contains actual data, otherwise use last stored tempChartData
     if (chartData) {
