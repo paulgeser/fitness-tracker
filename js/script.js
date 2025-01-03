@@ -1,8 +1,6 @@
-
 function openSideBar() {
     document.getElementById("activetrack-sidebar").style.display = "block";
 }
-
 function closeSideBar() {
     document.getElementById("activetrack-sidebar").style.display = "none";
 }
@@ -60,6 +58,11 @@ function loadTrainingRecords() {
 }
 
 function addNewTrainingRecord() {
+    // Makes sure validation has been triggered
+    const inputEvent = new Event('input', { bubbles: true, cancelable: true });
+    document.querySelectorAll("input, select, textarea").forEach((input) => {
+        input.dispatchEvent(inputEvent);
+    });
     const formDiv = document.getElementById("add-record-form");
     const name = document.getElementById('name').value.trim();
     const timestamp = document.getElementById('timestamp').value.trim().replace('T', ' ');
@@ -67,7 +70,9 @@ function addNewTrainingRecord() {
     const trainingType = document.getElementById('trainingType').value.trim();
     const description = document.getElementById('description').value.trim();
 
-    if (formDiv.checkValidity() && new Date(timestamp) < new Date()) {
+    const errorMessageBoxes = Array.from(document.querySelectorAll(".error-message"));
+    const existErrorMessages = errorMessageBoxes.find(element => element.innerHTML !== "");
+    if (formDiv.checkValidity() && new Date(timestamp) < new Date() && !existErrorMessages) {
         let xhr = new XMLHttpRequest();
         xhr.onerror = () => { displayNotification('Application error occured: Cannot send request'); }
         xhr.timeout = () => { displayNotification('Application error occured: Timeout'); }
@@ -84,10 +89,7 @@ function addNewTrainingRecord() {
         const request = { name, timestamp, burned_calories: burnedCalories, training_type: trainingType, description };
         xhr.send(JSON.stringify(request));
     } else {
-        const inputEvent = new Event('input', { bubbles: true, cancelable: true });
-        document.querySelectorAll("input, select, textarea").forEach((input) => {
-            input.dispatchEvent(inputEvent);
-        });
+        displayNotification(`There are validations errors with your inputs. Please fix them and then submit the form again.`, 'ERROR');
     }
 }
 
@@ -164,6 +166,8 @@ function createCaloriesBurnLineChart(chartData) {
         ctx.fill();
     });
 }
+// During resize of window, also resize the chart
+window.addEventListener("resize", () => createCaloriesBurnLineChart(null));
 
 function validateField(inputDivId, validatorFunction, errorMessage) {
     const inputDiv = document.getElementById(inputDivId);
@@ -172,19 +176,16 @@ function validateField(inputDivId, validatorFunction, errorMessage) {
         errorDiv.innerHTML = inputDiv.validity.valid && validatorFunction(inputDiv.value) ? "" : errorMessage;
     });
 }
-// During resize of window, also resize the chart
-window.addEventListener("resize", () => createCaloriesBurnLineChart(null));
-
 function validationInit() {
-    validateField("name", (value) => !!value.trim(),
+    validateField("name", (value) => !!value.trim() && value.trim().length > 0 && value.trim().length <= 45,
         'This field is required, cannot consist only of spaces and has a max length of 45 characters');
-    validateField("burnedCalories", (_) => true,
+    validateField("burnedCalories", (value) => Number(value) > 0 && Number(value) <= 10000,
         'This field is required and the value must be in the range between 1 and 10000');
-    validateField("timestamp", (value) => (new Date(value) < new Date()),
+    validateField("timestamp", (value) => value && (new Date(value) < new Date()),
         'This field is required and cannot be in the future');
-    validateField("trainingType", (_) => true,
+    validateField("trainingType", (value) => !!value.trim(),
         'This field is required');
-    validateField("description", (value) => !!value.trim(),
+    validateField("description", (value) => !!value.trim() && value.trim().length > 0 && value.trim().length <= 300,
         'This field is required, cannot consist only of spaces and has a max length of 300 characters');
 }
 
