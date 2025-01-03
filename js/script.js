@@ -42,8 +42,8 @@ function addTrainingRecordsToDOM(requestResponse) {
 let trainingType = 'outdoor';
 function loadTrainingRecords() {
     xhr = new XMLHttpRequest();
-    xhr.onerror = () => { displayNotification('Application error occured: Cannot send request'); }
-    xhr.timeout = () => { displayNotification('Application error occured: Timeout'); }
+    xhr.onerror = () => displayNotification('Application error occured: Cannot send request');
+    xhr.timeout = () => displayNotification('Application error occured: Timeout');
     xhr.onload = () => {
         if (xhr.status < 400) {
             const response = parseJsonHelper(xhr.responseText);
@@ -74,8 +74,8 @@ function addNewTrainingRecord() {
     const existErrorMessages = errorMessageBoxes.find(element => element.innerHTML !== "");
     if (formDiv.checkValidity() && new Date(timestamp) < new Date() && !existErrorMessages) {
         let xhr = new XMLHttpRequest();
-        xhr.onerror = () => { displayNotification('Application error occured: Cannot send request'); }
-        xhr.timeout = () => { displayNotification('Application error occured: Timeout'); }
+        xhr.onerror = () => displayNotification('Application error occured: Cannot send request');
+        xhr.timeout = () => displayNotification('Application error occured: Timeout');
         xhr.onload = () => {
             if (xhr.status < 400) {
                 const response = parseJsonHelper(xhr.responseText);
