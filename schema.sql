@@ -9,7 +9,7 @@ create table record(
     name varchar(45) not null,
     timestamp datetime not null,
     burned_calories int not null,
-    training_type varchar(45) not null,
+    training_type ENUM('outdoor', 'indoor') not null,
     description text not null,
     primary key (record_id)
 );
